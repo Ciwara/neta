@@ -1,21 +1,9 @@
 {% extends "base_generic.html" %}
 {% load staticfiles %}
 {% block content %}
-<link  rel="stylesheet" href="{% static "/social_login.css" %}">
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link  rel="stylesheet" href="{% static "/social_login.css" %}">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
- <p>
-   <ul>
-   {% if user and not user.is_anonymous %}
-     <li>
-       <a>Hello {{ user.get_full_name|default:user.username }}!</a>
-     </li>
-     <li>
-       <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a>
-     </li>
-   {% endif %}
-   </ul>
- </p>
     <div class="omb_login">
         <h3 class="omb_authTitle">Login or <a href="#">Sign up</a></h3>
         <div class="row omb_row-sm-offset-3 omb_socialButtons">

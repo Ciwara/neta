@@ -22,7 +22,7 @@ from neta import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
-
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+    url(r'^home/', views.home, name='home'),
+    url('/', include('django.contrib.auth.urls', namespace='auth')),
     url('', include('social.apps.django_app.urls', namespace='social')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

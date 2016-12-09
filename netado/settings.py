@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'social.apps.django_app.default',
 ]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
+TEMPLATE_CONTEXT_PROCESSORS = [
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
@@ -51,7 +51,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
-)
+]
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
@@ -168,8 +168,8 @@ LOGGING = {
         },
     }
 }
-LOGIN_REDIRECT_URL = '/'
-
+LOGIN_REDIRECT_URL = '/home'
+# AUTH_USER_MODEL = "neta.Owner"
 try:
     from netado.settings_local import *
 except Exception as e:
