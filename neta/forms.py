@@ -6,9 +6,22 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 
 from django import forms
-from neta.models import Owner
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+
+from neta.models import Owner, Vehicle
+
+
+class SearchForm(forms.Form):
+    number_engin = forms.CharField(label="Numéro de l'engins", max_length=100)
+
+    def get_result(self, required):
+        try:
+            result = Vehicle.objects.get(
+                number=self.cleaned_data.get('number_engin'))
+        except Exception as e:
+            result = None
+        return result
 
 
 class LoginForm(forms.Form):

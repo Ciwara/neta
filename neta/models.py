@@ -117,6 +117,9 @@ class ModelVehicle(models.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return self.name
+
 
 class Vehicle(models.Model):
 
