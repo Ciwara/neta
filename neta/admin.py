@@ -1,15 +1,18 @@
-# Register your models here.
-from django import forms
-from django.contrib import admin
-from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import Owner, Vehicle, ModelVehicle, Made, AttachedFile
-from .forms import UserCreationForm, UserChangeForm
+# Register your models here.
+# from django import forms
+from django.contrib import admin
+# from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+# from django.contrib.auth.forms import ReadOnlyPasswordHashField
+
+from .forms import UserChangeForm, UserCreationForm
+
+from .models import AttachedFile, Made, ModelVehicle, Owner, Vehicle
 
 
 class UserAdmin(BaseUserAdmin):
+
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
@@ -17,9 +20,9 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = (
-        'phone', 'full_name', 'email', 'date_of_birth', 'is_active', 'is_admin')
-    list_filter = ('is_admin', 'is_active')
+    list_display = ('phone', 'full_name', 'email', 'date_of_birth',
+                    'is_active', 'is_admin', 'localite')
+    list_filter = ('is_active', 'localite')
     fieldsets = (
         ("Identifiant", {'fields': ('phone', 'email', 'password')}),
         ('Personal info', {'fields': ('date_of_birth', 'full_name',)}),
@@ -30,7 +33,8 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('phone', 'full_name', 'email', 'date_of_birth', 'password1', 'password2')}
+            'fields': ('phone', 'full_name', 'email', 'date_of_birth',
+                       'password1', 'password2')}
          ),
         ('Permissions', {'fields': ('groups', 'is_admin')}),
     )
@@ -39,19 +43,23 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-# class OwnerAdmin(admin.ModelAdmin):
-#     list_display = ['first_name', 'last_name', 'phone', 'localite']
-#     list_filter = ['phone', 'localite']
+class OwnerAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'phone', 'localite']
+    list_filter = ['phone', 'localite']
 
 
 class AttachedFileInline(admin.TabularInline):
+
     model = AttachedFile
 
 
 class VehicleAdmin(admin.ModelAdmin):
+
     list_display = ['owner', 'model_vehicle',
                     'release_date', 'number', 'certify', 'lost', ]
-    list_filter = ['owner', 'model_vehicle', 'certify', 'lost']
+    list_filter = [
+                    # 'owner',
+                    'model_vehicle', 'certify', 'lost']
     inlines = [
         AttachedFileInline,
     ]
@@ -65,12 +73,11 @@ class ModelVehicleAdmin(admin.ModelAdmin):
 
 class MadeAdmin(admin.ModelAdmin):
     list_display = ['name', 'country']
-    pass
 
 
 class AttachedFileAdmin(admin.ModelAdmin):
+
     list_display = ['doc', 'doc_type', 'vehicle', 'uploaded_at']
-    pass
 
 # Now register the new UserAdmin...
 admin.site.register(Owner, UserAdmin)

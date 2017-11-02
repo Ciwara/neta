@@ -1,53 +1,74 @@
 {% extends "base_generic.html" %}
 {% load staticfiles i18n %}
 {% load widget_tweaks %}
-<link  rel="stylesheet" href="{% static "/social_login.css" %}">
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 {% block content %}
     <div class="omb_login">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">{% include "_search_form.html" with redirect_url='index' %}</div>
-
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <h3 class="omb_authTitle">{% trans "Login or"%} <a href="#">{% trans "Sign up" %}</a></h3>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">{% include "_search_form.html" with redirect_url='index' %}</div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"> <div class="row omb_row-sm-offset-3 omb_loginOr">
+            {% include "_message.html" with msg=login_form.errors %}
+            <div class="login">
+                <form "form-horizontal" method="POST">
+                    {% csrf_token %}
+                    <h3>{% trans "Thank you to identify you" %}</h3>
+                    <div  class="form-group">
+                        {{login_form.phone.errors}}
+                        <label>{{login_form.phone.label}}</label>
+                        {{login_form.phone|add_class:"form-control"}}
+                    </div>
+                    <div  class="form-group">
+                        {{login_form.password.errors}}
+                        <label>{{login_form.password.label}}</label>
+                        {{login_form.password|add_class:"form-control"}}
+                    </div>
+                    <button type="submit" name="_login" class="btn btn-primary">{% trans "Log in" %}</button>
+                </form>
+                <hr class="omb_hrOr">
+                <span class="omb_spanOr">or</span>
                 <div class="row omb_row-sm-offset-3 omb_socialButtons">
-                    <div class="col-xs-4 col-sm-4">
+                    <div class="col-xs-6 col-sm-6">
                         <a href="#" class="btn btn-lg btn-block omb_btn-facebook">
                             <i class="fa fa-facebook visible-xs"></i>
                             <span class="hidden-xs">Facebook</span>
                         </a>
                     </div>
-                    <div class="col-xs-4 col-sm-4">
+                    <div class="col-xs-6 col-sm-6">
                         <a href="#" class="btn btn-lg btn-block omb_btn-twitter">
                             <i class="fa fa-twitter visible-xs"></i>
                             <span class="hidden-xs">Twitter</span>
                         </a>
                     </div>
                 </div>
-                <div class="row omb_row-sm-offset-3 omb_loginOr">
-                    <div class="col-xs-12 col-sm-6">
-                        <hr class="omb_hrOr">
-                        <span class="omb_spanOr">or</span>
-                        {{form.errors}}
-                        {% if form.errors %}
-                        <p class="alert alert-danger"> {% trans "Your phone number and password do not match. Please try again." %}</p>
-                        {% endif %}
-                        <div class="login">
-                            <form "form-horizontal" method="POST">
-                                {% csrf_token %}
-                                <h3>{% trans "Thank you to identify you" %}</h3>
-                                <div  class="form-group">
-                                    <label>{{login_form.phone.label}}</label>
-                                    {{login_form.phone|add_class:"form-control"}}
-                                </div>
-                                <div  class="form-group">
-                                    <label>{{login_form.password.label}}</label>
-                                    {{login_form.password|add_class:"form-control"}}
-                                </div>
-                                <button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
-                            </form>
-                        </div>
+            </div>
+            {% include "_message.html" with msg=new_user_form.errors %}
+            <div class="new-user">
+                <form "form-horizontal" method="POST">
+                    {% csrf_token %}
+                    <div  class="form-group">
+                        <label>{{new_user_form.phone.label}}</label>
+                        {{new_user_form.phone|add_class:"form-control"}}
                     </div>
-                </div>
+                    <div  class="form-group">
+                        <label>{{new_user_form.full_name.label}}</label>
+                        {{new_user_form.full_name|add_class:"form-control"}}
+                    </div>
+                    <div  class="form-group">
+                        <label>{{new_user_form.localite.label}}</label>
+                        {{new_user_form.localite|add_class:"form-control"}}
+                    </div>
+                    <div  class="form-group">
+                        <label>{{new_user_form.date_of_birth.label}}</label>
+                        {{new_user_form.date_of_birth}}
+                    </div>
+                    <div  class="form-group">
+                        <label>{{new_user_form.password1.label}}</label>
+                        {{new_user_form.password1|add_class:"form-control"}}
+                    </div>
+                    <div  class="form-group">
+                        <label>{{new_user_form.password2.label}}</label>
+                        {{new_user_form.password2|add_class:"form-control"}}
+                    </div>
+                    <button type="submit" name="_add_user" class="btn btn-primary">{% trans "Sign Up" %}</button>
+                </form>
             </div>
         </div>
     </div>

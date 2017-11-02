@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 # vim: ai ts=4 sts=4 et sw=4 nu
 
+from django.contrib.auth.models import (AbstractBaseUser,
+                                        BaseUserManager, PermissionsMixin)
+
 from django.db import models
-from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser, PermissionsMixin
-)
 
 
 class OwnerManager(BaseUserManager):
 
-    def create_user(self, email,  phone, full_name, date_of_birth=None, password=None):
+    def create_user(self, email, phone, full_name, date_of_birth=None,
+                    password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
@@ -19,7 +20,7 @@ class OwnerManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         user = self.model(
-            email=self.normalize_email(email),
+            # email=self.normalize_email(email),
             # date_of_birth=date_of_birth,
             phone=phone,
             full_name=full_name
@@ -29,7 +30,8 @@ class OwnerManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, phone, full_name, password, email=None, date_of_birth=None):
+    def create_superuser(self, phone, full_name, password,
+                         email=None, date_of_birth=None):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
@@ -49,8 +51,8 @@ class OwnerManager(BaseUserManager):
 
 
 class Owner(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(
-        null=True, verbose_name='email address', max_length=255, unique=True, blank=True,)
+    email = models.EmailField(null=True, verbose_name='email address',
+                              max_length=255, unique=True, blank=True,)
     phone = models.IntegerField(unique=True)
     full_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -115,10 +117,7 @@ class ModelVehicle(models.Model):
     made = models.ForeignKey(Made, verbose_name="Marque")
 
     def __str__(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name
+        return "{} ({})".format(self.name, self.made)
 
 
 class Vehicle(models.Model):
@@ -131,13 +130,17 @@ class Vehicle(models.Model):
     release_date = models.DateField()
     # num_stars = models.IntegerField()
     # year = models.DateField()
-    number = models.CharField(max_length=100)
+    number = models.CharField(max_length=100, unique=True)
     certify = models.BooleanField(default=False)
     lost = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{owner}/{model_v}/{certify}/{lost}".format(owner=self.owner,
-                                                           model_v=self.model_vehicle, certify=self.certify, lost=self.lost)
+        return "{} {} {}".format(self.number, self.lost, self.certify)
+
+    # def __str__(self):
+    #     return "{owner}/{model_v}/{certify}/{lost}".format(
+    #         owner=self.owner, model_v=self.model_vehicle, certify=self.certify,
+    #         lost=self.lost)
 
 
 class AttachedFile(models.Model):
